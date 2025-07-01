@@ -17,9 +17,9 @@
   --user: #b0bec5;
   --danger: #e53935;
   --bg-dark: #23263b;
-  --bg-card: rgba(41,49,74,0.83);
+  --bg-card: rgba(41, 49, 74, 0.83);
   --bg-light: #f5fafd;
-  --shadow: 0 8px 32px rgba(0,0,0,0.18);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
 }
 
 body {
@@ -35,13 +35,18 @@ body {
     color: #23263b;
     background-color: #f5fafd;
   }
+
   body {
     background: linear-gradient(120deg, #f5fafd 0%, #e3e7ef 100%);
     color: #22293a;
   }
 }
 
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
   font-family: inherit;
   font-weight: 700;
   letter-spacing: .03em;
@@ -50,7 +55,12 @@ h1, h2, h3, h4, h5 {
 }
 
 @media (prefers-color-scheme: light) {
-  h1, h2, h3, h4, h5 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
     color: #23263b;
   }
 }
@@ -61,24 +71,30 @@ a {
   text-decoration: none;
   transition: color .2s;
 }
+
 a:hover {
   color: var(--accent);
 }
 
 /* --- Glassmorphism Card style --- */
-.MuiPaper-root, .mui-card, .custom-card {
+.MuiPaper-root,
+.mui-card,
+.custom-card {
   background: var(--bg-card);
   border-radius: 20px !important;
   box-shadow: var(--shadow) !important;
   padding: 1.8rem 1.3rem;
   margin-bottom: 2.2rem;
   backdrop-filter: blur(16px) saturate(180%);
-  border: 1.2px solid rgba(110,120,185,0.10);
+  border: 1.2px solid rgba(110, 120, 185, 0.10);
   transition: background 0.3s, box-shadow 0.3s;
 }
 
 @media (prefers-color-scheme: light) {
-  .MuiPaper-root, .mui-card, .custom-card {
+
+  .MuiPaper-root,
+  .mui-card,
+  .custom-card {
     background: #fff;
     box-shadow: 0 8px 32px rgba(50, 50, 90, 0.09) !important;
     backdrop-filter: none;
@@ -111,10 +127,11 @@ a:hover {
 .MuiTableRow-root {
   transition: background 0.15s, transform 0.18s;
 }
+
 .MuiTableRow-root:hover {
   background: rgba(25, 118, 210, 0.09) !important;
   transform: scale(1.012);
-  box-shadow: 0 6px 22px rgba(60,90,200,0.10);
+  box-shadow: 0 6px 22px rgba(60, 90, 200, 0.10);
   z-index: 2;
   cursor: pointer;
 }
@@ -125,7 +142,7 @@ a:hover {
   font-size: 1.1em !important;
   border-radius: 50% !important;
   border: 2px solid #27304a;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
   background: #1b2032 !important;
 }
 
@@ -144,20 +161,22 @@ a:hover {
   text-transform: uppercase;
   letter-spacing: 1px;
   padding: 0 8px !important;
-  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
 }
 
 .MuiChip-root[data-role="admin"] {
   background: var(--admin) !important;
   color: #1a1a1a !important;
 }
+
 .MuiChip-root[data-role="user"] {
   background: var(--user) !important;
   color: #23263b !important;
 }
 
 /* --- Buttons --- */
-.MuiButton-root, .MuiIconButton-root {
+.MuiButton-root,
+.MuiIconButton-root {
   border-radius: 12px !important;
   transition: background 0.18s, color 0.18s;
 }
@@ -166,11 +185,12 @@ a:hover {
   font-weight: 600;
   font-size: 1.09em;
   letter-spacing: .03em;
-  box-shadow: 0 2px 10px rgba(0,0,0,.04);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .04);
   padding: 0.7em 1.6em;
   background: var(--primary);
   color: #fff;
 }
+
 .MuiButton-root:hover {
   background: #115293;
 }
@@ -178,29 +198,40 @@ a:hover {
 .MuiIconButton-root {
   color: #a8b6d9;
 }
+
 .MuiIconButton-root:hover {
-  background: rgba(25,118,210,.11);
+  background: rgba(25, 118, 210, .11);
   color: #1976d2;
 }
 
 /* --- Inputs & Selects --- */
-.MuiInputBase-root, .MuiOutlinedInput-root, .MuiSelect-root, .MuiTextField-root {
+.MuiInputBase-root,
+.MuiOutlinedInput-root,
+.MuiSelect-root,
+.MuiTextField-root {
   border-radius: 12px !important;
   background: #23263b;
   color: #e6eaf4;
 }
+
 @media (prefers-color-scheme: light) {
-  .MuiInputBase-root, .MuiOutlinedInput-root, .MuiSelect-root, .MuiTextField-root {
+
+  .MuiInputBase-root,
+  .MuiOutlinedInput-root,
+  .MuiSelect-root,
+  .MuiTextField-root {
     background: #fff;
     color: #22293a;
   }
 }
+
 .MuiInputLabel-root {
   color: #7ba4ff !important;
   font-weight: 500;
 }
 
-.MuiInputBase-root.Mui-focused, .MuiOutlinedInput-root.Mui-focused {
+.MuiInputBase-root.Mui-focused,
+.MuiOutlinedInput-root.Mui-focused {
   border-color: var(--primary) !important;
 }
 
@@ -211,6 +242,7 @@ a:hover {
   background: var(--bg-card) !important;
   box-shadow: var(--shadow) !important;
 }
+
 @media (prefers-color-scheme: light) {
   .MuiDialog-paper {
     background: #fff !important;
@@ -218,21 +250,27 @@ a:hover {
 }
 
 /* --- Snackbar --- */
-.MuiSnackbar-root, .MuiAlert-root {
+.MuiSnackbar-root,
+.MuiAlert-root {
   border-radius: 10px !important;
   font-size: 1.08em;
 }
 
 /* --- Responsive tweaks --- */
 @media (max-width: 900px) {
-  .MuiPaper-root, .mui-card, .custom-card {
+
+  .MuiPaper-root,
+  .mui-card,
+  .custom-card {
     padding: 1.1rem 0.5rem;
     border-radius: 14px !important;
   }
+
   .MuiTableCell-root {
     font-size: 0.98em;
     padding: 10px 6px;
   }
+
   .MuiAvatar-root {
     width: 28px !important;
     height: 28px !important;
@@ -245,7 +283,10 @@ a:hover {
     font-size: 0.92em;
     padding: 7px 3px;
   }
-  h1, h2, h3 {
+
+  h1,
+  h2,
+  h3 {
     font-size: 1.6em;
   }
 }
@@ -255,19 +296,31 @@ a:hover {
   width: 12px;
   background: #23263b;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #32416c;
   border-radius: 8px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #1976d2;
 }
 
 /* Animace fade-in pro karty/tabulky */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(32px);}
-  to   { opacity: 1; transform: translateY(0);}
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.MuiPaper-root, .mui-card, .custom-card {
-  animation: fadeInUp .85s cubic-bezier(.23,1.09,.62,1.00);
+
+.MuiPaper-root,
+.mui-card,
+.custom-card {
+  animation: fadeInUp .85s cubic-bezier(.23, 1.09, .62, 1.00);
 }
