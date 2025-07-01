@@ -1,68 +1,273 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Avenir', 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color: #f3f4fa;
+  background-color: #23263b;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  --primary: #1976d2;
+  --secondary: #4f5b76;
+  --accent: #00e0b7;
+  --admin: #ffc107;
+  --user: #b0bec5;
+  --danger: #e53935;
+  --bg-dark: #23263b;
+  --bg-card: rgba(41,49,74,0.83);
+  --bg-light: #f5fafd;
+  --shadow: 0 8px 32px rgba(0,0,0,0.18);
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  background: linear-gradient(120deg, #23263b 0%, #22293a 100%);
+  transition: background 0.5s;
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: #23263b;
+    background-color: #f5fafd;
   }
-  a:hover {
-    color: #747bff;
+  body {
+    background: linear-gradient(120deg, #f5fafd 0%, #e3e7ef 100%);
+    color: #22293a;
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: .03em;
+  color: #fff;
+  margin-bottom: 0.25em;
+}
+
+@media (prefers-color-scheme: light) {
+  h1, h2, h3, h4, h5 {
+    color: #23263b;
   }
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color .2s;
+}
+a:hover {
+  color: var(--accent);
+}
+
+/* --- Glassmorphism Card style --- */
+.MuiPaper-root, .mui-card, .custom-card {
+  background: var(--bg-card);
+  border-radius: 20px !important;
+  box-shadow: var(--shadow) !important;
+  padding: 1.8rem 1.3rem;
+  margin-bottom: 2.2rem;
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1.2px solid rgba(110,120,185,0.10);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+@media (prefers-color-scheme: light) {
+  .MuiPaper-root, .mui-card, .custom-card {
+    background: #fff;
+    box-shadow: 0 8px 32px rgba(50, 50, 90, 0.09) !important;
+    backdrop-filter: none;
+    border: 1.2px solid #e8eefa;
+  }
+}
+
+/* --- Table --- */
+.MuiTable-root {
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.MuiTableCell-root {
+  font-size: 1.08em;
+  border-bottom: 1.5px solid #35406b !important;
+  padding: 16px 12px;
+  background: transparent !important;
+  transition: background 0.25s;
+}
+
+.MuiTableHead-root .MuiTableCell-root {
+  font-weight: 700;
+  font-size: 1.05em;
+  color: #7ba4ff;
+  background: none !important;
+  border-bottom: 2px solid #2d3256 !important;
+}
+
+.MuiTableRow-root {
+  transition: background 0.15s, transform 0.18s;
+}
+.MuiTableRow-root:hover {
+  background: rgba(25, 118, 210, 0.09) !important;
+  transform: scale(1.012);
+  box-shadow: 0 6px 22px rgba(60,90,200,0.10);
+  z-index: 2;
+  cursor: pointer;
+}
+
+/* Avatary */
+.MuiAvatar-root {
+  font-weight: bold !important;
+  font-size: 1.1em !important;
+  border-radius: 50% !important;
+  border: 2px solid #27304a;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
+  background: #1b2032 !important;
+}
+
+@media (prefers-color-scheme: light) {
+  .MuiAvatar-root {
+    border: 2px solid #c6d6ec;
+    background: #e5ecfa !important;
+  }
+}
+
+/* Chips */
+.MuiChip-root {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  font-size: 0.85em !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0 8px !important;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.08);
+}
+
+.MuiChip-root[data-role="admin"] {
+  background: var(--admin) !important;
+  color: #1a1a1a !important;
+}
+.MuiChip-root[data-role="user"] {
+  background: var(--user) !important;
+  color: #23263b !important;
+}
+
+/* --- Buttons --- */
+.MuiButton-root, .MuiIconButton-root {
+  border-radius: 12px !important;
+  transition: background 0.18s, color 0.18s;
+}
+
+.MuiButton-root {
+  font-weight: 600;
+  font-size: 1.09em;
+  letter-spacing: .03em;
+  box-shadow: 0 2px 10px rgba(0,0,0,.04);
+  padding: 0.7em 1.6em;
+  background: var(--primary);
+  color: #fff;
+}
+.MuiButton-root:hover {
+  background: #115293;
+}
+
+.MuiIconButton-root {
+  color: #a8b6d9;
+}
+.MuiIconButton-root:hover {
+  background: rgba(25,118,210,.11);
+  color: #1976d2;
+}
+
+/* --- Inputs & Selects --- */
+.MuiInputBase-root, .MuiOutlinedInput-root, .MuiSelect-root, .MuiTextField-root {
+  border-radius: 12px !important;
+  background: #23263b;
+  color: #e6eaf4;
+}
+@media (prefers-color-scheme: light) {
+  .MuiInputBase-root, .MuiOutlinedInput-root, .MuiSelect-root, .MuiTextField-root {
+    background: #fff;
+    color: #22293a;
+  }
+}
+.MuiInputLabel-root {
+  color: #7ba4ff !important;
+  font-weight: 500;
+}
+
+.MuiInputBase-root.Mui-focused, .MuiOutlinedInput-root.Mui-focused {
+  border-color: var(--primary) !important;
+}
+
+/* --- Dialogy --- */
+.MuiDialog-paper {
+  border-radius: 22px !important;
+  padding: 1.3rem 1.5rem !important;
+  background: var(--bg-card) !important;
+  box-shadow: var(--shadow) !important;
+}
+@media (prefers-color-scheme: light) {
+  .MuiDialog-paper {
+    background: #fff !important;
+  }
+}
+
+/* --- Snackbar --- */
+.MuiSnackbar-root, .MuiAlert-root {
+  border-radius: 10px !important;
+  font-size: 1.08em;
+}
+
+/* --- Responsive tweaks --- */
+@media (max-width: 900px) {
+  .MuiPaper-root, .mui-card, .custom-card {
+    padding: 1.1rem 0.5rem;
+    border-radius: 14px !important;
+  }
+  .MuiTableCell-root {
+    font-size: 0.98em;
+    padding: 10px 6px;
+  }
+  .MuiAvatar-root {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.98em !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .MuiTableCell-root {
+    font-size: 0.92em;
+    padding: 7px 3px;
+  }
+  h1, h2, h3 {
+    font-size: 1.6em;
+  }
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar {
+  width: 12px;
+  background: #23263b;
+}
+::-webkit-scrollbar-thumb {
+  background: #32416c;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #1976d2;
+}
+
+/* Animace fade-in pro karty/tabulky */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px);}
+  to   { opacity: 1; transform: translateY(0);}
+}
+.MuiPaper-root, .mui-card, .custom-card {
+  animation: fadeInUp .85s cubic-bezier(.23,1.09,.62,1.00);
 }
