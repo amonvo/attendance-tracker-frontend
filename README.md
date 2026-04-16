@@ -1,108 +1,105 @@
 # attendance-tracker-frontend
 
-Frontend web application for **AttendanceTrackerApi** — an employee attendance tracking system. Built with React and Vite, it provides a responsive interface for managing attendance records and users through a REST API backend.
+![Build](https://github.com/amonvo/attendance-tracker-frontend/actions/workflows/build.yml/badge.svg)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)
+![MUI](https://img.shields.io/badge/MUI-7-007FFF?logo=mui&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green)
 
----
+HR attendance management system built with React 19, Vite, and Material UI 7. Frontend for [AttendanceTrackerApi](https://github.com/amonvo/AttendanceTrackerApi).
 
-## Description
+## Screenshots
 
-`attendance-tracker-frontend` is a single-page application (SPA) that serves as the client for the AttendanceTrackerApi. It allows administrators and managers to track employee attendance in real time, view historical records, and manage user accounts — all through a clean, component-driven UI.
-
----
+> Dashboard with live charts, sidebar navigation, dark/light mode and CS/EN language switch.
 
 ## Tech Stack
 
 | Technology | Purpose |
-|---|---|
-| [React 19](https://react.dev/) | UI library |
-| [Vite](https://vitejs.dev/) | Build tool & dev server |
-| [MUI (Material UI v7)](https://mui.com/) | Component library & styling |
-| [Recharts](https://recharts.org/) | Data visualization |
-| [react-countup](https://github.com/glennreyes/react-countup) | Animated number counters |
-
----
+|-----------|---------|
+| React 19 | UI library |
+| Vite 6 | Build tool |
+| MUI v7 | Component library |
+| Recharts | Data visualization |
+| Docker + Nginx | Production deployment |
 
 ## Features
 
-- **Attendance Records** — View a complete list of all attendance entries across the organization
-- **Filter by User** — Look up attendance history for a specific employee
-- **Create / Update / Delete Records** — Full CRUD operations on attendance entries via the REST API
-- **User Management** — Interface for creating, editing, and removing employee accounts
-
----
+- **Dashboard** — stat cards, bar/pie/line charts, weekly attendance overview
+- **User Management** — CRUD, avatars, role chips, position field, pagination
+- **Attendance Records** — period filter (day/week/month/year), user performance chart, pagination
+- **Export** — CSV export for users and attendance with preview
+- **Dark / Light mode** — full MUI theme support
+- **CS / EN** — language switching
+- **Docker ready** — Nginx production build
 
 ## Getting Started
 
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) v18 or higher
-- The [AttendanceTrackerApi](../AttendanceTrackerApi) backend running locally or hosted remotely
-
-### Installation
+### Option A — Docker (recommended)
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/attendance-tracker-frontend.git
+git clone https://github.com/amonvo/attendance-tracker-frontend.git
 cd attendance-tracker-frontend
-
-# Install dependencies
-npm install
+docker build -t attendance-frontend .
+docker run -p 3000:80 attendance-frontend
 ```
 
-### Running the Development Server
+### Option B — Local
 
 ```bash
+git clone https://github.com/amonvo/attendance-tracker-frontend.git
+cd attendance-tracker-frontend
+npm install
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173` by default.
+App runs on `http://localhost:5173`
 
-### Building for Production
+### Full Stack (Docker Compose)
 
 ```bash
-npm run build
+git clone https://github.com/amonvo/AttendanceTrackerApi.git
+git clone https://github.com/amonvo/attendance-tracker-frontend.git
+cd ..
+docker-compose up --build
 ```
 
-The compiled output will be placed in the `dist/` directory.
-
----
+- Frontend: `http://localhost:3000`
+- Backend: `http://localhost:5000`
 
 ## Environment Variables
-
-Create a `.env` file in the project root and define the following variable:
 
 ```env
 VITE_API_URL=http://localhost:5000
 ```
 
-| Variable | Description |
-|---|---|
-| `VITE_API_URL` | Base URL of the AttendanceTrackerApi backend |
-
-> All Vite environment variables must be prefixed with `VITE_` to be exposed to the client.
-
----
-
 ## Project Structure
 
-```
 attendance-tracker-frontend/
-├── public/                 # Static assets served as-is
 ├── src/
-│   ├── assets/             # Images and static resources
-│   ├── App.jsx             # Root application component
-│   ├── App.css             # Global component styles
-│   ├── main.jsx            # Application entry point
-│   └── index.css           # Base/reset styles
-├── .env                    # Environment variables (not committed)
-├── eslint.config.js        # ESLint configuration
-├── index.html              # HTML entry point
-├── package.json
-└── vite.config.js          # Vite configuration
-```
+│   ├── components/
+│   │   ├── Attendance/
+│   │   ├── Dashboard/
+│   │   ├── Layout/
+│   │   └── Users/
+│   ├── pages/
+│   │   ├── AttendancePage.jsx
+│   │   ├── DashboardPage.jsx
+│   │   ├── ExportPage.jsx
+│   │   └── UsersPage.jsx
+│   ├── services/
+│   │   └── api.js
+│   ├── i18n.js
+│   └── App.jsx
+├── Dockerfile
+├── nginx.conf
+└── .github/workflows/
+└── build.yml
 
----
+## Related
+
+- [AttendanceTrackerApi](https://github.com/amonvo/AttendanceTrackerApi) — ASP.NET Core 8 backend
 
 ## License
 
-This project is intended for portfolio and demonstration purposes.
+MIT
