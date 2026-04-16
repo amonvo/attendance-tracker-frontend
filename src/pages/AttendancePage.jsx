@@ -23,7 +23,11 @@ import {
   Fade,
   ToggleButton,
   ToggleButtonGroup,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -257,7 +261,7 @@ export default function AttendancePage({ t, records, users, onCreateRecord, onUp
               {t("userPerformance")} — {users.find((u) => Number(u.id) === Number(attUserIdFilter))?.username}
             </Typography>
             <Box sx={{ width: "100%", height: 200 }}>
-              <ResponsiveContainer>
+              <ResponsiveContainer width="99%" height={200}>
                 <BarChart data={performanceChartData} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(128,128,128,0.2)" />
                   <XAxis dataKey="date" tick={{ fontSize: 11 }} />
@@ -362,8 +366,11 @@ export default function AttendancePage({ t, records, users, onCreateRecord, onUp
         </Paper>
 
         {/* Add record form */}
-        <Paper elevation={2} sx={{ p: 3 }}>
-          <Typography variant="h6" fontWeight={700} gutterBottom>{t("addRecord")}</Typography>
+        <Accordion elevation={2} sx={{ mt: 1 }}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography fontWeight={700}>{t("addRecord")} / Add Record</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <Box component="form" onSubmit={handleAddSubmit} sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
             <FormControl required size="small" sx={{ minWidth: 170 }}>
               <InputLabel>{t("users")}</InputLabel>
@@ -397,7 +404,8 @@ export default function AttendancePage({ t, records, users, onCreateRecord, onUp
             <TextField label={t("note")} name="note" value={addForm.note} onChange={handleAddChange} size="small" sx={{ flex: "1 1 180px" }} />
             <Button variant="contained" type="submit" sx={{ height: 40 }} disabled={addTimeError}>{t("add")}</Button>
           </Box>
-        </Paper>
+          </AccordionDetails>
+        </Accordion>
 
         {/* Edit dialog */}
         <Dialog open={editOpen} onClose={closeEdit}>

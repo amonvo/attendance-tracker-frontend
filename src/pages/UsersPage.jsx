@@ -23,7 +23,11 @@ import {
   Avatar,
   Chip,
   Fade,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PersonOffIcon from "@mui/icons-material/PersonOff";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -224,8 +228,11 @@ export default function UsersPage({ t, users, positions, onCreateUser, onUpdateU
         </Paper>
 
         {/* Add user form */}
-        <Paper elevation={2} sx={{ p: 3 }}>
-          <Typography variant="h6" fontWeight={700} gutterBottom>{t("addUser")}</Typography>
+        <Accordion elevation={2} sx={{ mt: 1 }}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography fontWeight={700}>{t("addUser")} / Add User</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <Box component="form" onSubmit={handleAddSubmit} sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
             <TextField label={t("name")} name="username" value={addForm.username} onChange={handleAddChange} required size="small" sx={{ flex: "1 1 160px" }} />
             <TextField label={t("email")} name="email" value={addForm.email} onChange={handleAddChange} required type="email" size="small" sx={{ flex: "1 1 180px" }} />
@@ -248,7 +255,8 @@ export default function UsersPage({ t, users, positions, onCreateUser, onUpdateU
             </FormControl>
             <Button variant="contained" type="submit" sx={{ height: 40 }}>{t("register")}</Button>
           </Box>
-        </Paper>
+          </AccordionDetails>
+        </Accordion>
 
         {/* Edit dialog */}
         <Dialog open={editOpen} onClose={closeEdit}>

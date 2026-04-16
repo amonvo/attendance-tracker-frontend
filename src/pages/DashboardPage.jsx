@@ -14,12 +14,12 @@ import TimerIcon from "@mui/icons-material/Timer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RTooltip, ResponsiveContainer,
-  PieChart, Pie, Cell,
+  PieChart, Pie, Cell, Legend,
   LineChart, Line,
 } from "recharts";
 import CountUp from "react-countup";
 
-const CHART_COLORS = ["#1976d2", "#b0bec5", "#ef5350"];
+const ROLE_COLORS = { admin: "#1976d2", user: "#42a5f5" };
 const CARD_SX = {
   p: 3,
   height: "100%",
@@ -113,21 +113,26 @@ export default function DashboardPage({ t, records, users }) {
     [records, thisYear]
   );
 
-  // 6. Bar chart: this week Mon-Sun
+  // 6. Bar chart: this week Mon-Sun (timezone-safe string comparison)
   const weekBarData = useMemo(() => {
     const CZ_SHORT = ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"];
-    const result = CZ_SHORT.map((name) => ({ name, minutes: 0 }));
-    const monday = new Date(now);
-    const dayOfWeek = (monday.getDay() + 6) % 7; // 0=Mon
-    monday.setDate(monday.getDate() - dayOfWeek);
-    monday.setHours(0, 0, 0, 0);
+    const result = CZ_SHORT.map((name) => ({ name, minutes: 0, hours: 0 }));
+    const today = new Date();
+    const dayOfWeek = (today.getDay() + 6) % 7; // 0=Mon
+    const weekDates = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(today);
+      d.setDate(today.getDate() - dayOfWeek + i);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    });
     for (const r of records) {
-      if (!r.date) continue;
-      const d = new Date(r.date);
-      d.setHours(0, 0, 0, 0);
-      const diff = Math.round((d - monday) / 86400000);
-      if (diff >= 0 && diff < 7) {
-        result[diff].minutes += toMinutes(r.arrivalTime, r.departureTime);
+      const dateStr = recordDate(r);
+      if (!dateStr) continue;
+      const idx = weekDates.indexOf(dateStr);
+      if (idx >= 0) {
+        result[idx].minutes += toMinutes(r.arrivalTime, r.departureTime);
       }
     }
     return result.map((d) => ({ ...d, hours: +(d.minutes / 60).toFixed(2) }));
@@ -208,15 +213,15 @@ export default function DashboardPage({ t, records, users }) {
         {/* Stat cards */}
         <Grid container spacing={2.5} sx={{ mb: 3 }}>
           {statCards.map((card) => (
-            <Grid item xs={6} sm={4} md={2.4} key={card.label}>
-              <Paper elevation={3} sx={{ ...CARD_SX, minHeight: 120 }}>
+            <Grid size={{ xs: 6, sm: 4, md: 2.4 }} key={card.label}>
+              <Paper elevation={3} sx={{ ...CARD_SX, minHeight: 120, borderLeft: "3px solid", borderColor: "primary.main" }}>
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                  <Typography variant="body2" color="text.secondary" fontWeight={500}>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>
                     {card.label}
                   </Typography>
                   {card.icon}
                 </Box>
-                <Typography variant="h4" fontWeight={800}>
+                <Typography variant="h4" fontWeight={700}>
                   {card.isCount ? (
                     <CountUp end={card.value} duration={1.2} />
                   ) : (
@@ -228,21 +233,21 @@ export default function DashboardPage({ t, records, users }) {
           ))}
         </Grid>
 
-        {/* Charts: Bar xs=12 md=7 | Pie xs=12 md=5 | Line xs=12 */}
+        {/* Charts: Bar md=5 | Pie md=3 | Line md=4 */}
         <Grid container spacing={3} sx={{ mb: 3 }}>
           {/* Bar chart */}
-          <Grid item xs={12} md={7}>
-            <Paper elevation={3} sx={{ ...CARD_SX, p: 2, minHeight: 320 }}>
+          <Grid size={{ xs: 12, md: 5 }}>
+            <Paper elevation={3} sx={{ ...CARD_SX, p: 2, minHeight: 380, width: "100%" }}>
               <Typography variant="subtitle1" fontWeight={700} gutterBottom>
                 {t("attendanceThisWeek")}
               </Typography>
-              <Box sx={{ width: "100%", height: 260 }}>
-                <ResponsiveContainer width="99%">
+              <Box sx={{ width: "100%" }}>
+                <ResponsiveContainer width="99%" height={300}>
                   <BarChart data={weekBarData} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(128,128,128,0.2)" />
                     <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                     <YAxis tick={{ fontSize: 12 }} unit="h" />
-                    <RTooltip formatter={(v) => [`${v}h`, t("worked")]} />
+                    <RTooltip formatter={(val) => [`${val}h`, "Odpracováno"]} />
                     <Bar dataKey="hours" fill="#1976d2" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -251,18 +256,18 @@ export default function DashboardPage({ t, records, users }) {
           </Grid>
 
           {/* Pie chart */}
-          <Grid item xs={12} md={5}>
-            <Paper elevation={3} sx={{ ...CARD_SX, p: 2, minHeight: 320 }}>
+          <Grid size={{ xs: 12, md: 3 }}>
+            <Paper elevation={3} sx={{ ...CARD_SX, p: 2, minHeight: 380, width: "100%" }}>
               <Typography variant="subtitle1" fontWeight={700} gutterBottom>
                 {t("roleDistribution")}
               </Typography>
-              <Box sx={{ width: "100%", height: 260, display: "flex", justifyContent: "center" }}>
+              <Box sx={{ width: "100%" }}>
                 {users.length === 0 ? (
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Box sx={{ display: "flex", alignItems: "center", height: 300 }}>
                     <Typography color="text.disabled">No data</Typography>
                   </Box>
                 ) : (
-                  <ResponsiveContainer width="99%">
+                  <ResponsiveContainer width="99%" height={300}>
                     <PieChart>
                       <Pie
                         data={pieData}
@@ -270,16 +275,17 @@ export default function DashboardPage({ t, records, users }) {
                         nameKey="name"
                         cx="50%"
                         cy="50%"
-                        innerRadius={50}
-                        outerRadius={100}
-                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                        innerRadius={70}
+                        outerRadius={110}
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                         labelLine={false}
                       >
-                        {pieData.map((entry, i) => (
-                          <Cell key={entry.name} fill={CHART_COLORS[i % CHART_COLORS.length]} />
+                        {pieData.map((entry) => (
+                          <Cell key={entry.name} fill={ROLE_COLORS[entry.name] || "#90caf9"} />
                         ))}
                       </Pie>
-                      <RTooltip />
+                      <RTooltip formatter={(val, name) => [val, name]} />
+                      <Legend />
                     </PieChart>
                   </ResponsiveContainer>
                 )}
@@ -288,18 +294,18 @@ export default function DashboardPage({ t, records, users }) {
           </Grid>
 
           {/* Line chart */}
-          <Grid item xs={12}>
-            <Paper elevation={3} sx={{ ...CARD_SX, p: 2 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Paper elevation={3} sx={{ ...CARD_SX, p: 2, minHeight: 380, width: "100%" }}>
               <Typography variant="subtitle1" fontWeight={700} gutterBottom>
                 {t("hoursTrend")}
               </Typography>
-              <Box sx={{ width: "100%", height: 200 }}>
-                <ResponsiveContainer width="99%">
+              <Box sx={{ width: "100%" }}>
+                <ResponsiveContainer width="99%" height={300}>
                   <LineChart data={lineData} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(128,128,128,0.2)" />
                     <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={4} />
                     <YAxis tick={{ fontSize: 12 }} unit="h" />
-                    <RTooltip formatter={(v) => [`${v}h`, t("worked")]} />
+                    <RTooltip formatter={(val) => [`${val}h`, "Odpracováno"]} />
                     <Line
                       type="monotone"
                       dataKey="hours"
