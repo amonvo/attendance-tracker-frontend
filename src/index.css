@@ -758,6 +758,7 @@ main {
   margin-left: 7px;
 }
 .table-scroll {
+  position: relative;
   overflow-x: auto;
 }
 table {
