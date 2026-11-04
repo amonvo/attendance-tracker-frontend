@@ -45,3 +45,11 @@ Use `docker compose up --build` from the sibling backend directory after setting
 `src/App.jsx` holds workspace state and navigation, `src/components` contains dialogs and editors, `src/services/api.js` centralizes HTTP/CSRF handling, and `src/lib/data.js` contains reporting, dates and fictional demo data. `src/i18n.js` contains both languages. Styles and breakpoints are in `src/index.css`.
 
 Current reporting uses same-day local times. Overnight records must be split. Invitation/reset flows, payroll calculations and compliance reporting are roadmap items. License clarification is pending author review, as the original MIT statement had no accompanying license file.
+
+## Interface preview
+
+The screenshots show the fictional demo workspace in Czech and English.
+
+![Czech workspace overview](docs/screenshots/overview.png)
+
+![English dark appearance](docs/screenshots/dark.png)
