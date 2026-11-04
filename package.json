@@ -1,33 +1,36 @@
 {
-  "name": "attendance-tracker-frontend",
+  "name": "attendance-workspace",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": "^24.15.0 || >=26.0.0"
+  },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview --host 127.0.0.1",
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.1.2",
-    "@mui/material": "^7.1.2",
-    "react": "^19.1.0",
-    "react-countup": "^6.5.3",
-    "react-dom": "^19.1.0",
-    "recharts": "^3.0.2"
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "lucide-react": "1.67.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.25.0",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
-    "@vitejs/plugin-react": "^4.4.1",
-    "eslint": "^9.25.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
+    "@eslint/js": "^10.0.1",
+    "@testing-library/react": "16.3.3",
+    "@vitejs/plugin-react": "^6.2.1",
+    "eslint": "^10.14.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
-    "vite": "^6.3.5"
+    "jsdom": "^30.1.3",
+    "vite": "^8.3.5",
+    "vitest": "5.1.0"
   }
 }

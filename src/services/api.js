@@ -1,59 +1,81 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
-
-export async function getUsers() {
-  const resp = await fetch(`${BASE_URL}/api/Users`);
-  if (!resp.ok) throw new Error("Failed to fetch users");
-  return resp.json();
+export class ApiError extends Error {
+  constructor(message, status) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
 }
 
-export async function createUser(data) {
-  return fetch(`${BASE_URL}/api/Users`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+export function createApi(fetcher = (...args) => fetch(...args)) {
+  let token;
+  async function request(path, method = "GET", data) {
+    if (method !== "GET" && !token) {
+      const result = await request("/auth/csrf");
+      token = result.token;
+    }
+    let response;
+    try {
+      response = await fetcher(`/api${path}`, {
+        method,
+        credentials: "same-origin",
+        headers: {
+          Accept: "application/json",
+          ...(data !== undefined ? { "Content-Type": "application/json" } : {}),
+          ...(method !== "GET" ? { "X-CSRF-TOKEN": token } : {}),
+        },
+        ...(data !== undefined ? { body: JSON.stringify(data) } : {}),
+      });
+    } catch {
+      throw new ApiError("NETWORK_ERROR", 0);
+    }
+    const text = response.status === 204 ? "" : await response.text();
+    let body;
+    try {
+      body = text ? JSON.parse(text) : null;
+    } catch {
+      body = null;
+    }
+    if (!response.ok) {
+      if (response.status === 401 || response.status === 400) token = undefined;
+      const message = body?.errors
+        ? Object.values(body.errors).flat().join(" ")
+        : body?.detail || body?.title || `HTTP_${response.status}`;
+      throw new ApiError(message, response.status);
+    }
+    if (text && body === null)
+      throw new ApiError("INVALID_RESPONSE", response.status);
+    return body;
+  }
+  return {
+    me: () => request("/auth/me"),
+    login: async (data) => {
+      const user = await request("/auth/login", "POST", data);
+      token = undefined;
+      return user;
+    },
+    logout: async () => {
+      await request("/auth/logout", "POST");
+      token = undefined;
+    },
+    users: () => request("/users"),
+    records: (from, to) =>
+      request(
+        `/attendancerecords?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`,
+      ),
+    saveUser: (data) =>
+      request(
+        `/users${data.id ? `/${data.id}` : ""}`,
+        data.id ? "PUT" : "POST",
+        data,
+      ),
+    deleteUser: (id) => request(`/users/${id}`, "DELETE"),
+    saveRecord: (data) =>
+      request(
+        `/attendancerecords${data.id ? `/${data.id}` : ""}`,
+        data.id ? "PUT" : "POST",
+        data,
+      ),
+    deleteRecord: (id) => request(`/attendancerecords/${id}`, "DELETE"),
+  };
 }
-
-export async function updateUser(id, data) {
-  return fetch(`${BASE_URL}/api/Users/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-}
-
-export async function deleteUser(id) {
-  return fetch(`${BASE_URL}/api/Users/${id}`, { method: "DELETE" });
-}
-
-export async function getAttendanceRecords() {
-  const resp = await fetch(`${BASE_URL}/api/attendancerecords`);
-  if (!resp.ok) throw new Error("Failed to fetch attendance records");
-  return resp.json();
-}
-
-export async function getRecordsByUser(userId) {
-  const resp = await fetch(`${BASE_URL}/api/attendancerecords/user/${userId}`);
-  if (!resp.ok) throw new Error("Failed to fetch attendance records");
-  return resp.json();
-}
-
-export async function createAttendanceRecord(data) {
-  return fetch(`${BASE_URL}/api/attendancerecords`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-}
-
-export async function updateAttendanceRecord(id, data) {
-  return fetch(`${BASE_URL}/api/attendancerecords/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-}
-
-export async function deleteAttendanceRecord(id) {
-  return fetch(`${BASE_URL}/api/attendancerecords/${id}`, { method: "DELETE" });
-}
+export const api = createApi();

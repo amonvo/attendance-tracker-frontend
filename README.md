@@ -1,105 +1,55 @@
-# attendance-tracker-frontend
+# Attendance Workspace
 
-![Build](https://github.com/amonvo/attendance-tracker-frontend/actions/workflows/build.yml/badge.svg)
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
-![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)
-![MUI](https://img.shields.io/badge/MUI-7-007FFF?logo=mui&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-green)
+A focused workspace for people and time. React 19, Vite 8 and a responsive interface in Czech and English, with light and dark themes.
 
-HR attendance management system built with React 19, Vite, and Material UI 7. Frontend for [AttendanceTrackerApi](https://github.com/amonvo/AttendanceTrackerApi).
+## Try locally
 
-## Screenshots
+Requires Node 24.15 or newer in the 24 LTS line.
 
-> Dashboard with live charts, sidebar navigation, dark/light mode and CS/EN language switch.
-
-## Tech Stack
-
-| Technology | Purpose |
-|-----------|---------|
-| React 19 | UI library |
-| Vite 6 | Build tool |
-| MUI v7 | Component library |
-| Recharts | Data visualization |
-| Docker + Nginx | Production deployment |
-
-## Features
-
-- **Dashboard** — stat cards, bar/pie/line charts, weekly attendance overview
-- **User Management** — CRUD, avatars, role chips, position field, pagination
-- **Attendance Records** — period filter (day/week/month/year), user performance chart, pagination
-- **Export** — CSV export for users and attendance with preview
-- **Dark / Light mode** — full MUI theme support
-- **CS / EN** — language switching
-- **Docker ready** — Nginx production build
-
-## Getting Started
-
-### Option A — Docker (recommended)
-
-```bash
-git clone https://github.com/amonvo/attendance-tracker-frontend.git
-cd attendance-tracker-frontend
-docker build -t attendance-frontend .
-docker run -p 3000:80 attendance-frontend
-```
-
-### Option B — Local
-
-```bash
-git clone https://github.com/amonvo/attendance-tracker-frontend.git
-cd attendance-tracker-frontend
-npm install
+```sh
+npm ci
 npm run dev
 ```
 
-App runs on `http://localhost:5173`
+Open `http://127.0.0.1:5173`. Choose the interactive demo to explore fictional team members, attendance, editing, filters and CSV export. Demo changes stay in page memory and reset on reload. Appearance and language preferences are stored locally.
 
-### Full Stack (Docker Compose)
+To use real accounts, start [AttendanceTrackerApi](https://github.com/amonvo/AttendanceTrackerApi) on port 5135 and initialize its database using the backend README. During paired PR review, check out `codex/professional-attendance` in both repositories. Vite proxies `/api` to the API. An administrator creates member accounts. Members see their own records, and server authorization enforces access.
 
-```bash
-git clone https://github.com/amonvo/AttendanceTrackerApi.git
-git clone https://github.com/amonvo/attendance-tracker-frontend.git
-cd ..
-docker-compose up --build
+## Features
+
+- Overview with team totals, recorded hours, weekly activity and recent records.
+- Team management with database-backed positions and administrator/member roles.
+- Attendance creation, editing and explicit deletion, with date and member filters.
+- CSV export of filtered records with UTF-8 BOM, quoted values and formula neutralization.
+- Responsive navigation, keyboard-accessible dialogs, loading/error/empty states and retained drafts after failed saves.
+- CS/EN translations, locally served fonts, local initials-based avatars and theme preferences.
+
+Requests use same-origin HttpOnly cookie authentication and CSRF request tokens. Client-side environment variables are public build-time configuration. Keep secrets on the server.
+
+## Checks
+
+```sh
+npm run lint
+npm test
+npm run build
 ```
 
-- Frontend: `http://localhost:3000`
-- Backend: `http://localhost:5000`
+Tests cover all user and attendance mutations under HTTP failures, network errors, CSRF rotation, CSV handling and editor behavior. CI runs lint, tests, build, a production dependency audit and a container build.
 
-## Environment Variables
+## Containers
 
-```env
-VITE_API_URL=http://localhost:5000
-```
+Use `docker compose up --build` from the sibling backend directory after setting its `.env` bootstrap credentials. Open `http://localhost:3000`. Nginx serves the UI and proxies `/api` to the backend. The image uses Node 24 for build and an unprivileged Nginx runtime. Production deployment requires HTTPS and coordinated backend configuration.
 
-## Project Structure
+## Structure
 
-attendance-tracker-frontend/
-├── src/
-│   ├── components/
-│   │   ├── Attendance/
-│   │   ├── Dashboard/
-│   │   ├── Layout/
-│   │   └── Users/
-│   ├── pages/
-│   │   ├── AttendancePage.jsx
-│   │   ├── DashboardPage.jsx
-│   │   ├── ExportPage.jsx
-│   │   └── UsersPage.jsx
-│   ├── services/
-│   │   └── api.js
-│   ├── i18n.js
-│   └── App.jsx
-├── Dockerfile
-├── nginx.conf
-└── .github/workflows/
-└── build.yml
+`src/App.jsx` holds workspace state and navigation, `src/components` contains dialogs and editors, `src/services/api.js` centralizes HTTP/CSRF handling, and `src/lib/data.js` contains reporting, dates and fictional demo data. `src/i18n.js` contains both languages. Styles and breakpoints are in `src/index.css`.
 
-## Related
+Current reporting uses same-day local times. Overnight records must be split. Invitation/reset flows, payroll calculations and compliance reporting are roadmap items. License clarification is pending author review, as the original MIT statement had no accompanying license file.
 
-- [AttendanceTrackerApi](https://github.com/amonvo/AttendanceTrackerApi) — ASP.NET Core 8 backend
+## Interface preview
 
-## License
+The screenshots show the fictional demo workspace in Czech and English.
 
-MIT
+![Czech workspace overview](docs/screenshots/overview.png)
+
+![English dark appearance](docs/screenshots/dark.png)
